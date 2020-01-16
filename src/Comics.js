@@ -46,6 +46,11 @@ function Comics() {
     setSearchByTitle(searchByTitleFormInput);
   }
 
+  const handleSearchByTitleReset = (event) => {
+    event.preventDefault();
+    setSearchByTitle('');
+  }
+
   const handleSearchByTitleOnChange = (event) => {
     event.preventDefault();
     console.log(event.target.value);
@@ -114,6 +119,7 @@ function Comics() {
               color="secondary"
               size="lg"
               onClick={handleSearchByTitleSubmit}>Search Comics</Button>
+              onClick={handleSearchByTitleReset}>Reset</Button>
           </FormGroup>
         </Form>
         {!loading && comics && comics.results && comics.results.length > 0 ? (
