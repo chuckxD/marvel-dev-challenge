@@ -129,7 +129,7 @@ function Comics() {
                 onClick={handleSearchByTitleReset}>Reset</Button>
           </FormGroup>
         </Form>
-        {!loading && comics && comics.results && comics.results.length > 0 ? (
+        {!loading && comics && comics.results ? (
           <>
             {comics.results.map(comicGroup => (
               <CardGroup>
