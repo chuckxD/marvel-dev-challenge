@@ -48,6 +48,7 @@ function Comics() {
 
   const handleSearchByTitleReset = (event) => {
     event.preventDefault();
+    setSearchByTitleFormInput('');
     setSearchByTitle('');
   }
 
@@ -114,12 +115,18 @@ function Comics() {
               name="searchInput"
               id="searchInput"
               placeholder="Comic titles"
+              value={searchByTitleFormInput}
               onChange={handleSearchByTitleOnChange}/>
             <Button
               color="secondary"
               size="lg"
+              style={{ marginRight: '20px', marginTop: '10px' }}
               onClick={handleSearchByTitleSubmit}>Search Comics</Button>
-              onClick={handleSearchByTitleReset}>Reset</Button>
+              <Button
+                color="secondary"
+                size="lg"
+                style={{ marginTop: '10px' }}
+                onClick={handleSearchByTitleReset}>Reset</Button>
           </FormGroup>
         </Form>
         {!loading && comics && comics.results && comics.results.length > 0 ? (
