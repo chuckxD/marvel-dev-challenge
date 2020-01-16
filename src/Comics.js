@@ -16,11 +16,14 @@ import {
   Label,
   Input,
 } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
 
-import './App.css';
+import './Comics.css';
 
 // TODO: break out single components or where we can pull out
-function App() {
+function Comics() {
+  let history = useHistory();
+  console.log(history);
 
   const [comics, setComics] = useState({
     results: [],
@@ -30,6 +33,12 @@ function App() {
   const [searchByTitleFormInput, setSearchByTitleFormInput] = useState('');
 
   const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;
+
+  const handleNavigateDetail = (event) => {
+    event.preventDefault();
+    console.log(event.target);
+    history.push(`/comic-detail/${event.target.id}`)
+  }
 
   const handleSearchByTitleSubmit = (event) => {
     event.preventDefault();
@@ -119,9 +128,13 @@ function App() {
                         top
                         width="100%"
                         src={[comic.thumbnail.path, comic.thumbnail.extension].join('.')}
-                        alt="Card image cap" />
+                        alt="Card image cap"
+                        className="Comics-comicImage"
+                        id={comic.id}
+                        onClick={handleNavigateDetail}
+                      />
                         <CardText>{comic.variantDescription}</CardText>
-                        <Button>Details</Button>
+                        <Button id={comic.id} onClick={handleNavigateDetail}>Comic Details</Button>
                       </CardBody>
                     </Card>
                   ))}
@@ -136,4 +149,4 @@ function App() {
   );
 }
 
-export default App;
+export default Comics;
