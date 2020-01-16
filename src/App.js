@@ -4,16 +4,17 @@ import { createHash } from 'crypto';
 import { groupBy } from 'rambda';
 import {
   Container,
-  Row,
-  Col,
   Card,
   Button,
   CardImg,
   CardTitle,
   CardText,
   CardGroup,
-  CardSubtitle,
   CardBody,
+  FormGroup,
+  Form,
+  Label,
+  Input,
 } from 'reactstrap';
 
 import './App.css';
@@ -24,6 +25,23 @@ function App() {
   const [comics, setComics] = useState({
     results: [],
   });
+  const [loading, setLoading] = useState(true);
+  const [searchByTitle, setSearchByTitle] = useState('');
+  const [searchByTitleFormInput, setSearchByTitleFormInput] = useState('');
+
+  const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;
+
+  const handleSearchByTitleSubmit = (event) => {
+    event.preventDefault();
+    console.log(event.target.value);
+    setSearchByTitle(searchByTitleFormInput);
+  }
+
+  const handleSearchByTitleOnChange = (event) => {
+    event.preventDefault();
+    console.log(event.target.value);
+    setSearchByTitleFormInput(event.target.value);
+  }
 
   useEffect(() => {
     const fetchComics = async () => {
@@ -37,12 +55,16 @@ function App() {
           ts,
           hash,
           apikey: pub,
+          ...(!isEmpty(searchByTitle) && { titleStartsWith: searchByTitle }),
         };
+
+        setLoading(true);
         const result = await axios.get(url, { params })
           .then((resp) => {
             console.log(`RESPONSE: `, resp);
             if (resp.data && resp.data.data) {
               const comics = resp.data.data.results.map((c, i) => ({ ...c, index: i }));
+              // bad bad bad, just learn to flex dummy
               const groupComicsByIndex = groupBy(comic => Math.floor(comic.index / 4));
               // console.log(`what are u`, [...Object.values(groupComicsByIndex(comics))]);
               return {
@@ -59,18 +81,32 @@ function App() {
         console.log(`RESULT: `, result);
 
         setComics(result);
+        setLoading(false);
       } catch (err) {
         console.log(`FETCH CHARS ERROR: `, err);
       }
     };
     fetchComics();
-  }, []);
+  }, [searchByTitle]);
 
   return (
     <Container fluid="lg">
-      <div>
-        {console.log(comics.results)}
-        {comics.results && comics.results.length > 0 ? (
+        <Form onSubmit={handleSearchByTitleSubmit}>
+          <FormGroup>
+            <Label for="searchInput">Search Comics</Label>
+            <Input
+              type="searchInput"
+              name="searchInput"
+              id="searchInput"
+              placeholder="Comic titles"
+              onChange={handleSearchByTitleOnChange}/>
+            <Button
+              color="secondary"
+              size="lg"
+              onClick={handleSearchByTitleSubmit}>Search Comics</Button>
+          </FormGroup>
+        </Form>
+        {!loading && comics && comics.results && comics.results.length > 0 ? (
           <>
             {comics.results.map(comicGroup => (
               <CardGroup>
@@ -92,9 +128,8 @@ function App() {
               ))}
           </>
           ) : (
-            <span>no char results</span>
+            <div />
           )}
-        </div>
       </Container>
   );
 }

@@ -1,0 +1,8 @@
+- search listing, image clickable
+- wire up search actions/state/form
+  - write seperate fetch with additional param
+- wire up view toggle and actions/state
+- hook up react router
+- wire up comic detail action/state/view
+  - back button/action
+- styles
