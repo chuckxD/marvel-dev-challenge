@@ -43,6 +43,7 @@ function App() {
     setSearchByTitleFormInput(event.target.value);
   }
 
+  // this should get pulled out as a custom hook
   useEffect(() => {
     const fetchComics = async () => {
       try {
@@ -120,7 +121,7 @@ function App() {
                         src={[comic.thumbnail.path, comic.thumbnail.extension].join('.')}
                         alt="Card image cap" />
                         <CardText>{comic.variantDescription}</CardText>
-                        <Button>Button</Button>
+                        <Button>Details</Button>
                       </CardBody>
                     </Card>
                   ))}
@@ -128,7 +129,8 @@ function App() {
               ))}
           </>
           ) : (
-            <div />
+            // TODO: ADD CASE FOR NO RESULTS
+            <span>loading...</span>
           )}
       </Container>
   );
